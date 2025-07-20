@@ -8,6 +8,8 @@ except ImportError:  # pragma: no cover
         def input(self, prompt: str = "") -> str:
             return input(prompt)
 
+import re
+
 from typing import Optional
 from models import (
     GeneralNote, Field, Record, AddressBook,

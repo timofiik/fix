@@ -2,12 +2,47 @@
 import re
 # from collections import UserDict
 from typing import Optional, List, Type #Tuple
-from rich.columns import Columns
-from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
+try:
+    from rich.columns import Columns
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.table import Table
+    HAVE_RICH = True
+except ImportError:  # pragma: no cover - fallback for minimal envs
+    HAVE_RICH = False
+
+    class Console:
+        def print(self, *args, **kwargs):
+            print(*args)
+
+        def input(self, prompt: str = "") -> str:
+            return input(prompt)
+
+    class Columns(list):
+        pass
+
+    class Panel:
+        def __init__(self, renderable, title: str = "", border_style: str = ""):
+            self.renderable = renderable
+            self.title = title
+
+        def __str__(self):
+            return f"{self.title}\n{self.renderable}"
+
+    class Table:
+        def __init__(self, *args, **kwargs):
+            self.rows = []
+
+        def add_column(self, *args, **kwargs):
+            pass
+
+        def add_row(self, *args, **kwargs):
+            self.rows.append(" | ".join(args))
+
+        def __str__(self):
+            return "\n".join(self.rows)
 import getpass
-from main import _client
+from ai import client as _client
 from models import GeneralNote, Field, Record, AddressBook
 from storage import *
 from storage import save_users

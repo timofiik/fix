@@ -1,9 +1,40 @@
 import datetime
+import datetime
 import re
 from typing import Optional, List, Tuple, Type
 from collections import UserDict
-from handlers import *
-from handlers import get_record_key, make_key, make_key_from_input
+
+__all__ = [
+    'Field', 'Name', 'Surname', 'Address', 'Email', 'Phone', 'Birthday',
+    'Record', 'AddressBook', 'GeneralNote', 'GeneralNoteBook',
+    'get_record_key', 'make_key', 'make_key_from_input', 'group_notes_by_tag'
+]
+
+def make_key(name: str, surname: str = "") -> str:
+    return f"{name} {surname}".strip().lower()
+
+
+def make_key_from_input(fullname: str) -> str:
+    parts = fullname.strip().split(maxsplit=1)
+    return make_key(*parts)
+
+
+def get_record_key(name: str, book: 'AddressBook') -> Optional[str]:
+    name_parts = name.strip().split(maxsplit=1)
+    if not name_parts:
+        return None
+
+    matches = [k for k in book.data if all(part.lower() in k for part in name_parts)]
+    if len(matches) == 1:
+        return matches[0]
+    elif len(matches) > 1:
+        print("Multiple matches found:")
+        for i, k in enumerate(matches, 1):
+            print(f"{i}. {k.title()}")
+        idx = input("Select number >>> ").strip()
+        if idx.isdigit() and 1 <= int(idx) <= len(matches):
+            return matches[int(idx) - 1]
+    return None
 
 
 

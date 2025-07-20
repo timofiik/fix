@@ -65,7 +65,8 @@ CONTACT_DESC = {
     "add-contact-note": "add note to contact",
     "back":  "return to mode selection",
     "exit | close":  "end assistant work",
-    "hello | help": "output all commands"
+    "hello": "output all commands",
+    "help": "output all commands"
 }
 
 NOTE_DESC = {
@@ -77,7 +78,8 @@ NOTE_DESC = {
     "group-notes": "find notes grouped by tags",
     "back":  "return to mode selection",
     "exit | close":  "end assistant work",
-    "hello | help": "output all commands"
+    "hello": "output all commands",
+    "help": "output all commands"
 }
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -191,8 +193,13 @@ def show_birthdays(book: AddressBook, matches):
 
 def help_msg(section="contacts"):
     mapping = CONTACT_DESC if section == "contacts" else NOTE_DESC
+    title = (
+        "\n📇 Команди для роботи з контактами"
+        if section == "contacts"
+        else "\n📘 Команди для роботи з нотатками"
+    )
 
-    table = Table(title="\n📘 Команди для роботи з нотатками", header_style="bold blue", style="bold bright_cyan")
+    table = Table(title=title, header_style="bold blue", style="bold bright_cyan")
 
     table.add_column("Команда", justify="center", style="bold deep_sky_blue1", no_wrap=True)
     table.add_column("Опис", justify="center", style="white")
